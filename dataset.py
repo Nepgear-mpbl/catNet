@@ -25,31 +25,31 @@ def get_data_url_set(src_folder='data/train/'):
     return data_url_list, label_list
 
 
-def get_batch_data(data_url_list, label_list, batch_size):
-    temp = np.array([data_url_list, label_list])
-    temp = temp.transpose()
-    batch_url = np.random.choice(len(temp), batch_size)
-    batch_url_list = []
-    batch_label_list = []
-    for i in batch_url:
-        batch_url_list.append(data_url_list[i])
-        batch_label_list.append(label_list[i])
-    imgdata = []
-    for url in batch_url_list:
-        im = Image.open(url)
-        x, y = im.size
-        if x > y:
-            crop_box = ((x - y) / 2, 0, x - ((x - y) / 2), y)
-        else:
-            crop_box = (0, (y - x) / 2, x, y - ((y - x) / 2))
-        im = im.crop(crop_box)
-        im = im.resize((208, 208))
-        imdata = np.reshape(np.asarray(im, dtype='float32'), [208, 208, 3])
-        imgdata.append(imdata)
-    batch_data = np.asarray(imgdata, np.float32)
-    batch_label = np.asarray(batch_label_list, np.int32)
-    batch_label = (np.arange(2) == batch_label[:, None]).astype(np.float32)
-    return batch_data, batch_label
+# def get_batch_data(data_url_list, label_list, batch_size):
+#     temp = np.array([data_url_list, label_list])
+#     temp = temp.transpose()
+#     batch_url = np.random.choice(len(temp), batch_size)
+#     batch_url_list = []
+#     batch_label_list = []
+#     for i in batch_url:
+#         batch_url_list.append(data_url_list[i])
+#         batch_label_list.append(label_list[i])
+#     imgdata = []
+#     for url in batch_url_list:
+#         im = Image.open(url)
+#         x, y = im.size
+#         if x > y:
+#             crop_box = ((x - y) / 2, 0, x - ((x - y) / 2), y)
+#         else:
+#             crop_box = (0, (y - x) / 2, x, y - ((y - x) / 2))
+#         im = im.crop(crop_box)
+#         im = im.resize((208, 208))
+#         imdata = np.reshape(np.asarray(im, dtype='float32'), [208, 208, 3])
+#         imgdata.append(imdata)
+#     batch_data = np.asarray(imgdata, np.float32)
+#     batch_label = np.asarray(batch_label_list, np.int32)
+#     batch_label = (np.arange(2) == batch_label[:, None]).astype(np.float32)
+#     return batch_data, batch_label
 
 
 def get_next_batch_data(data_url_list, label_list, batch_size, cur_index):
